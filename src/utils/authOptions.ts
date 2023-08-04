@@ -72,7 +72,7 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ user, token, session }) {
+    async jwt({ user, token }) {
       if (user) {
         token.id = user.id;
       }
