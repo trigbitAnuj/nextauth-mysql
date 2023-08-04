@@ -1,0 +1,15 @@
+version: "3"
+services:
+  mysql:
+    image: "mysql"
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    ports:
+      - 3306:3306
+
+  myredis:
+    image: "redis"
+    restart: always
+    ports:
+      - 6379:6379
