@@ -35,6 +35,9 @@ const Home = () => {
       <Link className="p-2 bg-blue-400 ml-4 mt-4" href="/register">
         Register
       </Link>
+      <Link className="p-2 bg-blue-400 ml-4 mt-4" href="/adminDashboard">
+        Dashboard
+      </Link>
 
       <div className="mb-6 text-sm font-semibold underline underline-offset-4 mt-4">
         status:{status}
