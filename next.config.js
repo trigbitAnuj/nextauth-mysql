@@ -1,4 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+const { config } = require("process");
 
-module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  webpack: (config, context) => {
+    config.module.rules.push({
+      test: /\.(graphql|gql)$/,
+      use: [require.resolve("graphql-tag/loader")],
+    });
+    return config;
+  },
+};
+
+module.exports = nextConfig;
