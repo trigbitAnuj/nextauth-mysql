@@ -1,13 +1,23 @@
 "use client";
+
+import { Role } from "@/model/user/interface";
 import { signIn } from "next-auth/react";
 import { ChangeEvent, useState } from "react";
 
+type formValues = {
+  username: string;
+  email: string;
+  password: string;
+  role: Role | string;
+};
+
 export const RegisterForm = () => {
   let [loading, setLoading] = useState(false);
-  let [formValues, setFormValues] = useState({
+  let [formValues, setFormValues] = useState<formValues>({
     username: "",
     email: "",
     password: "",
+    role: "",
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,6 +31,7 @@ export const RegisterForm = () => {
           username: formValues.username,
           email: formValues.email,
           password: formValues.password,
+          role: formValues.role,
         }),
       });
 
@@ -41,17 +52,20 @@ export const RegisterForm = () => {
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
-    console.log(name, value);
+    console.log(name, value, "line no. 58");
     setFormValues({ ...formValues, [name]: value });
   };
 
   return (
     <>
-      <form onSubmit={onSubmit} className="flex flex-col gap-5">
+      <form onSubmit={onSubmit} className="flex flex-col gap-5 mt-8">
         <label htmlFor="Username">Username</label>
         <input
+          className="border-2 border-black p-2 text-gray-600"
           required
           type="text"
           name="username"
@@ -62,6 +76,7 @@ export const RegisterForm = () => {
         <label htmlFor="email">Email</label>
         <input
           required
+          className="border-2 border-black p-2 text-gray-600"
           type="email"
           name="email"
           value={formValues.email}
@@ -71,12 +86,27 @@ export const RegisterForm = () => {
         <label htmlFor="password">Password</label>
         <input
           required
+          className="border-2 border-black p-2 text-gray-600"
           type="password"
           name="password"
           value={formValues.password}
           onChange={handleChange}
           placeholder="password"
         />
+
+        <label htmlFor="role">Role:</label>
+
+        <select
+          name="role"
+          className="border-2 border-black p-2 text-gray-600"
+          id="role"
+          value={formValues.role}
+          onChange={handleChange}
+        >
+          <option>--role--</option>
+          <option value="USER">USER</option>
+          <option value="ADMIN">ADMIN</option>
+        </select>
         <button className="bg-blue-400 p-2 text-white" disabled={loading}>
           {loading ? "loading..." : "Register"}
         </button>
