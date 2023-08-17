@@ -1,4 +1,4 @@
-import { sequelize } from "@/config/mysql";
+import { initDb, sequelize } from "@/config/mysql";
 import SequelizeAdapter from "@auth/sequelize-adapter";
 import { AuthOptions, Awaitable } from "next-auth";
 import bcryptjs from "bcryptjs";
@@ -6,9 +6,7 @@ import Email from "next-auth/providers/email";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import type { Adapter } from "next-auth/adapters";
-import { User } from "@/model/userModel";
-
-sequelize.sync();
+import { models } from "@/config/mysql";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -24,6 +22,7 @@ export const authOptions: AuthOptions = {
       },
 
       async authorize(credentials, req): Promise<any> {
+        await initDb();
         const { email, password } = credentials as {
           email: string;
           password: string;
@@ -34,7 +33,7 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        const user = await User.findOne({
+        const user = await models.User.findOne({
           where: { email },
         });
 
@@ -48,6 +47,7 @@ export const authOptions: AuthOptions = {
           return null;
         }
         if (user && validPassword) {
+          console.log(user, "line 51 in authorise");
           return user;
         } else {
           return null;
@@ -72,23 +72,31 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ user, token }) {
-      if (user) {
-        token.id = user.id;
+    async jwt({ token, user }): Promise<any> {
+      await initDb();
+      console.log("jwt callback", { token, user });
+      const dbUser = await models.User.findOne({
+        where: { email: token.email! },
+      });
+      if (!dbUser) {
+        return token;
       }
-      return token;
+      return {
+        id: dbUser?.id,
+        email: dbUser?.email,
+        name: dbUser?.name,
+        role: dbUser?.role,
+        picture: dbUser?.image,
+      };
     },
     async session({ session, token }) {
       if (token) {
-        return {
-          ...session,
-          user: {
-            ...session.user,
-            id: token.id,
-          },
-        };
+        (session.user.id = token.id),
+          (session.user.name = token.name),
+          (session.user.email = token.email),
+          (session.user.role = token.role),
+          (session.user.image = token.picture);
       }
-
       return session;
     },
   },
@@ -102,6 +110,6 @@ export const authOptions: AuthOptions = {
   debug: process.env.NODE_ENV === "development",
   pages: {
     //signIn: "/signin",
-    error: "/error",
+    // error: "/error",
   },
 };
