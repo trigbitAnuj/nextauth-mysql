@@ -29,7 +29,7 @@ class Option
 
   @BelongsTo(() => Question, {
     foreignKey: "questionId",
-    as: "question",
+    as: "questions",
   })
   public question!: ReturnType<() => Question>;
 
