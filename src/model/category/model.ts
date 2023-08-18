@@ -9,6 +9,10 @@ import {
 } from "sequelize-typescript";
 import { CategoryCreationAttribute, ICategory } from "./interface";
 import Question from "../question/model";
+import {
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+} from "sequelize";
 
 @Table({ tableName: "Categories", timestamps: true })
 class Category
@@ -31,6 +35,12 @@ class Category
     as: "questions",
   })
   public questions!: ReturnType<() => Question[]>;
+
+  declare createQuestions: HasManyCreateAssociationMixin<
+    Question,
+    "categoryId"
+  >;
+  declare getQuestions: HasManyGetAssociationsMixin<Question>;
 
   @CreatedAt
   public declare readonly createdAt: Date;
