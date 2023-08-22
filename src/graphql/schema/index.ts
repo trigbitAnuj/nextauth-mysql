@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 const categorytype = require("./category");
 const questiontype = require("./question");
+const optionsType = require("./options");
 
 const rootSchema = gql`
   type Query {
@@ -11,4 +12,4 @@ const rootSchema = gql`
   }
 `;
 
-module.exports = [rootSchema, categorytype, questiontype];
+module.exports = [rootSchema, categorytype, questiontype, optionsType];
