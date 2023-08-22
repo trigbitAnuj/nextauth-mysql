@@ -1,4 +1,5 @@
 const categoryResolvers = require("./category");
 const questionResolvers = require("./question");
+const optionsResolvers = require("./options");
 
-module.exports = [categoryResolvers, questionResolvers];
+module.exports = [categoryResolvers, questionResolvers, optionsResolvers];
