@@ -12,6 +12,10 @@ import {
 import { IQuestion, QuestionCreationAttribute } from "./interface";
 import Category from "../category/model";
 import Option from "../options/model";
+import {
+  HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
+} from "sequelize";
 
 @Table({ tableName: "Question", timestamps: true })
 class Question
@@ -38,6 +42,9 @@ class Question
     as: "options",
   })
   public options!: ReturnType<() => Option[]>;
+
+  declare createOptions: HasManyCreateAssociationMixin<Option, "questionId">;
+  declare getOptions: HasManyGetAssociationsMixin<Option>;
 
   @BelongsTo(() => Category, {
     foreignKey: "categoryId",
