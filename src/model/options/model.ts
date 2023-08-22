@@ -10,6 +10,11 @@ import {
 } from "sequelize-typescript";
 import { IOptions, OptionsCreationAttribute } from "./interface";
 import Question from "../question/model";
+import Category from "../category/model";
+import {
+  BelongsToCreateAssociationMixin,
+  BelongsToGetAssociationMixin,
+} from "sequelize";
 
 @Table({ tableName: "Options", timestamps: true })
 class Option
