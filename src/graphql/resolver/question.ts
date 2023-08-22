@@ -1,4 +1,5 @@
 import { models } from "@/config/mysql";
+import Question from "@/model/question/model";
 
 module.exports = {
   Query: {
@@ -13,14 +14,29 @@ module.exports = {
       return questionwithid;
     },
   },
+  Questions: {
+    options: (root: Question) => {
+      console.log(root);
+      console.log(root.getOptions());
+      return root.getOptions();
+    },
+  },
 
   Mutation: {
-    createQuestion: async (root: any, { text }: { text: string }) => {
+    addQuestion: async (
+      root: any,
+      { text, categoryId }: { text: string; categoryId: string }
+    ) => {
       console.log(root);
-      return await models.Question.create({
-        name: text,
-        categoryId: root.id,
-      });
+      const category = await models.Category.findByPk(categoryId);
+      if (category) {
+        console.log(category);
+
+        return await models.Question.create({
+          name: text,
+          categoryId: category.id,
+        });
+      }
     },
   },
 };
