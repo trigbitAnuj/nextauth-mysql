@@ -13,6 +13,8 @@ import { IQuestion, QuestionCreationAttribute } from "./interface";
 import Category from "../category/model";
 import Option from "../options/model";
 import {
+  BelongsToCreateAssociationMixin,
+  BelongsToGetAssociationMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
 } from "sequelize";
@@ -51,6 +53,9 @@ class Question
     as: "category",
   })
   public category!: ReturnType<() => Category>;
+
+  declare createCategory: BelongsToCreateAssociationMixin<Category>;
+  declare getCaegory: BelongsToGetAssociationMixin<Category>;
 
   @CreatedAt
   public declare readonly createdAt: Date;
