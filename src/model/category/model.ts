@@ -9,6 +9,7 @@ import {
 } from "sequelize-typescript";
 import { CategoryCreationAttribute, ICategory } from "./interface";
 import Question from "../question/model";
+
 import {
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
