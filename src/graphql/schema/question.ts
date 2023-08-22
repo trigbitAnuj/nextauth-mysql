@@ -5,16 +5,17 @@ module.exports = gql`
     id: String
     name: String
     categoryId: String
+    options: [Options!]
   }
 
   type Query {
-    getQuestionsWithId(categoryId: String): Questions
+    getQuestionsWithId(categoryId: String!): [Questions!]
   }
 
   type Mutation {
-    createQuestion(text: String!): CreateQuestionResponse
+    addQuestion(text: String!, categoryId: String!): AddQuestionResponse
   }
-  type CreateQuestionResponse {
+  type AddQuestionResponse {
     id: String
     name: String
     categoryId: String
