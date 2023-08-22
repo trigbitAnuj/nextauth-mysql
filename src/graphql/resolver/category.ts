@@ -1,5 +1,4 @@
 import { models } from "@/config/mysql";
-import Category from "@/model/category/model";
 
 type ParentId = {
   id: string;
@@ -24,12 +23,14 @@ module.exports = {
   },
 
   Category: {
-    questions: async (root: any) => {
+    questions: (root: any) => {
       console.log(root);
-      const question = root.getQuestions();
-      console.log(question);
       return root.getQuestions();
     },
+    // options:(root: any) => {
+    //   console.log(root);
+    //   return root.getOptions();
+    // },
   },
 
   Mutation: {
